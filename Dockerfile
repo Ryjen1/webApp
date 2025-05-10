@@ -8,12 +8,13 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y maven
 
-# Copy files
+# Copy Maven files
 COPY pom.xml .
 COPY src ./src
 
-# Build with tests skipped
-RUN ./mvnw clean package -DskipTests
+# Build the app inside the container
+RUN mkdir -p target && \
+    mvn clean package -DskipTests
 
 # Run the app
 ENTRYPOINT ["java", "-jar", "target/*.jar"]
