@@ -1,5 +1,5 @@
-# Use OpenJDK 21
-FROM eclipse-temurin:21.0.3_9-jdk
+# Use Eclipse Temurin JDK 21
+FROM eclipse-temurin:21-jdk-jammy
 
 # Set working directory
 WORKDIR /app
@@ -8,14 +8,12 @@ WORKDIR /app
 RUN apt-get update && \
     apt-get install -y maven
 
-# Copy Maven files
+# Copy files
 COPY pom.xml .
 COPY src ./src
 
-# Build the app inside the container
-RUN mkdir -p target && \
-    mvn clean package
+# Build with tests skipped
+RUN ./mvnw clean package -DskipTests
 
 # Run the app
 ENTRYPOINT ["java", "-jar", "target/*.jar"]
-
